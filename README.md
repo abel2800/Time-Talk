@@ -10,7 +10,6 @@
 
 <p align="center">
   <a href="#features">Features</a> •
-  <a href="#screenshots">Screenshots</a> •
   <a href="#installation">Installation</a> •
   <a href="#usage">Usage</a> •
   <a href="#license">License</a>
@@ -32,24 +31,13 @@ This app was created with accessibility as the primary focus, featuring:
 
 - **🎯 Tap to Hear** - Touch anywhere on the screen to hear the current time
 - **⏰ Auto Announcements** - Set automatic time announcements every 15, 30, or 60 minutes
-- **🌙 Quiet Hours** - Disable announcements during sleeping hours
+- **🌙 Quiet Hours** - Disable announcements during sleeping hours (e.g., 10 PM - 7 AM)
 - **🔔 Background Operation** - Works even when the app is minimized or closed
 - **🎨 Beautiful Clock** - Analog wall clock with digital display
 - **📳 Haptic Feedback** - Feel a vibration when time is spoken
 - **🌐 Multi-Language** - Support for multiple languages
 - **🔋 Battery Efficient** - Optimized for low battery consumption
-
-## 📸 Screenshots
-
-<p align="center">
-  <img src="screenshots/home_screen.png" alt="Home Screen" width="250"/>
-  <img src="screenshots/settings_intervals.png" alt="Auto Announcements" width="250"/>
-  <img src="screenshots/settings_voice.png" alt="Voice Settings" width="250"/>
-</p>
-
-<p align="center">
-  <img src="screenshots/settings_quiet.png" alt="Quiet Hours Settings" width="250"/>
-</p>
+- **🔊 Adjustable Voice** - Control volume and speech speed
 
 ## 🚀 Installation
 
