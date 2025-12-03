@@ -8,7 +8,7 @@ import 'services/background_service.dart';
 import 'screens/home_screen.dart';
 
 /// Talk Time - Voice-based Clock Assistant
-/// Works 24/7 in background with persistent notification
+/// Announces time at set intervals 24/7
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +18,8 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   
-  // Initialize background service
-  await BackgroundService().initialize();
+  // Initialize background service for 24/7 operation
+  await BackgroundService.initialize();
   
   runApp(const TalkTimeApp());
 }
@@ -47,43 +47,13 @@ class TalkTimeMaterialApp extends StatefulWidget {
   State<TalkTimeMaterialApp> createState() => _TalkTimeMaterialAppState();
 }
 
-class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> with WidgetsBindingObserver {
+class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> {
   bool _isInitialized = false;
-  final BackgroundService _backgroundService = BackgroundService();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _initializeApp();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    final alarmService = context.read<AlarmService>();
-    final ttsService = context.read<TtsService>();
-    
-    if (state == AppLifecycleState.paused) {
-      debugPrint('App paused - background service active');
-      _updateNotification(alarmService);
-    } else if (state == AppLifecycleState.resumed) {
-      debugPrint('App resumed');
-      alarmService.onAnnounce = (timeText) => ttsService.speak(timeText);
-    }
-  }
-
-  void _updateNotification(AlarmService alarmService) {
-    if (alarmService.intervalMinutes > 0) {
-      _backgroundService.updateNotification(
-        'Announcing time every ${alarmService.intervalMinutes} minutes',
-      );
-    }
   }
 
   Future<void> _initializeApp() async {
@@ -94,6 +64,7 @@ class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> with WidgetsB
     await settings.loadSettings();
     await alarmService.loadSettings();
     
+    // Connect alarm service to TTS for in-app announcements
     alarmService.onAnnounce = (timeText) => ttsService.speak(timeText);
     
     ttsService.loadSettings(
@@ -102,37 +73,26 @@ class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> with WidgetsB
       language: settings.language,
     );
     
+    // Start background service
+    await BackgroundService.startService();
+    
     setState(() => _isInitialized = true);
     
     // Request permissions after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _requestPermissionsIfNeeded();
+      _requestPermissions();
     });
   }
 
-  Future<void> _requestPermissionsIfNeeded() async {
-    final alreadyRequested = await BackgroundService.werePermissionsRequested();
+  Future<void> _requestPermissions() async {
+    if (!mounted) return;
     
-    if (!alreadyRequested && mounted) {
-      // Request notification permission first
-      await BackgroundService.requestNotificationPermission();
-      
-      // Then request battery optimization
-      if (mounted) {
-        await BackgroundService.requestBatteryOptimization(context);
-      }
-      
-      await BackgroundService.markPermissionsRequested();
-      
-      // Show persistent notification if interval is set
-      final alarmService = context.read<AlarmService>();
-      if (alarmService.intervalMinutes > 0) {
-        _backgroundService.showPersistentNotification(
-          title: '🕐 Talk Time Active',
-          body: 'Announcing time every ${alarmService.intervalMinutes} minutes',
-          intervalMinutes: alarmService.intervalMinutes,
-        );
-      }
+    // Request notification permission first
+    await BackgroundService.requestNotificationPermission();
+    
+    // Then request battery optimization
+    if (mounted) {
+      await BackgroundService.requestBatteryOptimization(context);
     }
   }
 
@@ -146,46 +106,24 @@ class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> with WidgetsB
         theme: settings.getTheme(),
         home: Scaffold(
           body: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  const Color(0xFF0D1117),
-                  const Color(0xFF161B22),
-                ],
+                colors: [Color(0xFF0D1117), Color(0xFF161B22)],
               ),
             ),
             child: const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.access_time_filled_rounded,
-                    size: 100,
-                    color: Color(0xFF00BFA5),
-                  ),
+                  Icon(Icons.access_time_filled_rounded, size: 100, color: Color(0xFF00BFA5)),
                   SizedBox(height: 24),
-                  Text(
-                    'Talk Time',
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+                  Text('Talk Time', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white)),
                   SizedBox(height: 8),
-                  Text(
-                    'Voice Clock Assistant',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white54,
-                    ),
-                  ),
+                  Text('Voice Clock Assistant', style: TextStyle(fontSize: 16, color: Colors.white54)),
                   SizedBox(height: 32),
-                  CircularProgressIndicator(
-                    color: Color(0xFF00BFA5),
-                  ),
+                  CircularProgressIndicator(color: Color(0xFF00BFA5)),
                 ],
               ),
             ),

@@ -5,12 +5,11 @@ import '../utils/time_utils.dart';
 import 'background_service.dart';
 
 /// Alarm Service for Talk Time
-/// Manages scheduled time announcements with 24/7 background support
+/// Manages settings and communicates with background service
 
 class AlarmService extends ChangeNotifier {
   Timer? _announcementTimer;
   DateTime? _lastAnnouncement;
-  final BackgroundService _backgroundService = BackgroundService();
   
   int _intervalMinutes = 0;
   bool _quietModeEnabled = false;
@@ -28,119 +27,83 @@ class AlarmService extends ChangeNotifier {
   int get quietStartMinute => _quietStartMinute;
   int get quietEndHour => _quietEndHour;
   int get quietEndMinute => _quietEndMinute;
-  bool get isScheduled => _announcementTimer != null && _announcementTimer!.isActive;
+  bool get isScheduled => _intervalMinutes > 0;
   
-  /// Start the announcement timer
-  void startTimer() {
-    stopTimer();
+  /// Set interval and update background service
+  void setInterval(int minutes) {
+    _intervalMinutes = minutes;
+    _saveSettings();
+    
+    // Update background service
+    BackgroundService.updateInterval(minutes);
+    
+    // Also run in-app timer for when app is in foreground
+    _startInAppTimer();
+    
+    notifyListeners();
+  }
+  
+  /// Start in-app timer (for when app is open)
+  void _startInAppTimer() {
+    _announcementTimer?.cancel();
     
     if (_intervalMinutes <= 0) return;
-    
-    // Check every 30 seconds to ensure accurate timing
-    _announcementTimer = Timer.periodic(const Duration(seconds: 30), (_) {
-      _checkAndAnnounce();
-    });
     
     _lastAnnouncement = DateTime.now();
     
-    // Show persistent notification
-    _backgroundService.showPersistentNotification(
-      title: '🕐 Talk Time Active',
-      body: 'Announcing time every $_intervalMinutes minutes',
-      intervalMinutes: _intervalMinutes,
-    );
-    
-    notifyListeners();
-    debugPrint('AlarmService: Timer started - $_intervalMinutes min interval');
-  }
-  
-  /// Check if it's time to announce
-  void _checkAndAnnounce() {
-    if (_intervalMinutes <= 0) return;
-    
-    final now = DateTime.now();
-    
-    // Check if enough time has passed
-    if (_lastAnnouncement != null) {
-      final elapsed = now.difference(_lastAnnouncement!).inMinutes;
-      if (elapsed < _intervalMinutes) {
+    _announcementTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (_intervalMinutes <= 0) return;
+      
+      final now = DateTime.now();
+      
+      if (_lastAnnouncement != null) {
+        final elapsed = now.difference(_lastAnnouncement!).inMinutes;
+        if (elapsed < _intervalMinutes) return;
+      }
+      
+      if (_quietModeEnabled && TimeUtils.isQuietTime(
+        now, _quietStartHour, _quietStartMinute, _quietEndHour, _quietEndMinute,
+      )) {
         return;
       }
-    }
-    
-    // Check quiet hours
-    if (_quietModeEnabled && TimeUtils.isQuietTime(
-      now, _quietStartHour, _quietStartMinute, _quietEndHour, _quietEndMinute,
-    )) {
-      debugPrint('AlarmService: Quiet hours - skipping');
-      return;
-    }
-    
-    // Announce time!
-    _lastAnnouncement = now;
-    final timeText = TimeUtils.formatTimeForSpeech(now);
-    onAnnounce?.call(timeText);
-    debugPrint('AlarmService: Announced - $timeText');
-  }
-  
-  /// Stop the timer
-  void stopTimer() {
-    _announcementTimer?.cancel();
-    _announcementTimer = null;
-    
-    // Remove notification if no interval
-    if (_intervalMinutes <= 0) {
-      _backgroundService.removePersistentNotification();
-    }
-    
-    notifyListeners();
-    debugPrint('AlarmService: Timer stopped');
-  }
-  
-  /// Set interval and update everything
-  void setInterval(int minutes) {
-    _intervalMinutes = minutes;
-    
-    if (minutes > 0) {
-      startTimer();
-    } else {
-      stopTimer();
-      _backgroundService.removePersistentNotification();
-    }
-    
-    notifyListeners();
-    _saveSettings();
+      
+      _lastAnnouncement = now;
+      final timeText = TimeUtils.formatTimeForSpeech(now);
+      onAnnounce?.call(timeText);
+    });
   }
   
   void setQuietModeEnabled(bool enabled) {
     _quietModeEnabled = enabled;
-    _updateNotificationStatus();
-    notifyListeners();
     _saveSettings();
+    _updateQuietHours();
+    notifyListeners();
   }
   
   void setQuietStartTime(int hour, int minute) {
     _quietStartHour = hour;
     _quietStartMinute = minute;
-    notifyListeners();
     _saveSettings();
+    _updateQuietHours();
+    notifyListeners();
   }
   
   void setQuietEndTime(int hour, int minute) {
     _quietEndHour = hour;
     _quietEndMinute = minute;
-    notifyListeners();
     _saveSettings();
+    _updateQuietHours();
+    notifyListeners();
   }
   
-  void _updateNotificationStatus() {
-    if (_intervalMinutes > 0) {
-      String status = 'Announcing time every $_intervalMinutes minutes';
-      if (_quietModeEnabled) {
-        status += ' (Quiet: ${quietStartTimeString} - ${quietEndTimeString})';
-      }
-      _backgroundService.updateNotification(status);
-    }
+  void _updateQuietHours() {
+    BackgroundService.updateQuietHours(
+      enabled: _quietModeEnabled,
+      startHour: _quietStartHour,
+      startMinute: _quietStartMinute,
+      endHour: _quietEndHour,
+      endMinute: _quietEndMinute,
+    );
   }
   
   bool isCurrentlyQuiet() {
@@ -176,7 +139,7 @@ class AlarmService extends ChangeNotifier {
     _quietEndMinute = prefs.getInt('quietEndMinute') ?? 0;
     
     if (_intervalMinutes > 0) {
-      startTimer();
+      _startInAppTimer();
     }
     
     notifyListeners();
@@ -184,7 +147,7 @@ class AlarmService extends ChangeNotifier {
   
   @override
   void dispose() {
-    stopTimer();
+    _announcementTimer?.cancel();
     super.dispose();
   }
 }

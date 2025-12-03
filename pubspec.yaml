@@ -21,7 +21,11 @@ dependencies:
   # State management
   provider: ^6.1.1
   
-  # For foreground service and notifications
+  # For foreground service - TRUE background execution
+  flutter_background_service: ^5.0.5
+  flutter_background_service_android: ^6.2.2
+  
+  # For notifications
   flutter_local_notifications: ^17.0.0
   
   # For battery optimization permission
