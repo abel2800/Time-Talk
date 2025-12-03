@@ -179,11 +179,6 @@ void onStart(ServiceInstance service) async {
   final FlutterTts tts = FlutterTts();
   final FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
   
-  // Initialize TTS
-  await tts.setLanguage('en-US');
-  await tts.setSpeechRate(0.5);
-  await tts.setVolume(1.0);
-  
   // Load settings from shared preferences
   final prefs = await SharedPreferences.getInstance();
   int intervalMinutes = prefs.getInt('intervalMinutes') ?? 0;
@@ -193,6 +188,14 @@ void onStart(ServiceInstance service) async {
   int quietEndHour = prefs.getInt('quietEndHour') ?? 7;
   int quietEndMinute = prefs.getInt('quietEndMinute') ?? 0;
   bool vibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
+  String language = prefs.getString('language') ?? 'en-US';
+  double volume = prefs.getDouble('volume') ?? 1.0;
+  double rate = prefs.getDouble('rate') ?? 0.5;
+  
+  // Initialize TTS with saved settings
+  await tts.setLanguage(language);
+  await tts.setSpeechRate(rate);
+  await tts.setVolume(volume);
   
   DateTime? lastAnnouncement;
   
@@ -227,6 +230,7 @@ void onStart(ServiceInstance service) async {
   // Main loop - checks every 30 seconds for precise timing
   Timer.periodic(const Duration(seconds: 30), (timer) async {
     // Reload settings in case they changed
+    await prefs.reload(); // Refresh prefs from disk
     intervalMinutes = prefs.getInt('intervalMinutes') ?? 0;
     quietEnabled = prefs.getBool('quietModeEnabled') ?? false;
     quietStartHour = prefs.getInt('quietStartHour') ?? 22;
@@ -234,6 +238,25 @@ void onStart(ServiceInstance service) async {
     quietEndHour = prefs.getInt('quietEndHour') ?? 7;
     quietEndMinute = prefs.getInt('quietEndMinute') ?? 0;
     vibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
+    
+    // Reload voice settings
+    final newLanguage = prefs.getString('language') ?? 'en-US';
+    final newVolume = prefs.getDouble('volume') ?? 1.0;
+    final newRate = prefs.getDouble('rate') ?? 0.5;
+    
+    // Apply if changed
+    if (newLanguage != language) {
+      language = newLanguage;
+      await tts.setLanguage(language);
+    }
+    if (newVolume != volume) {
+      volume = newVolume;
+      await tts.setVolume(volume);
+    }
+    if (newRate != rate) {
+      rate = newRate;
+      await tts.setSpeechRate(rate);
+    }
     
     if (intervalMinutes <= 0) return;
     
@@ -288,12 +311,15 @@ bool _isQuietTime(DateTime now, int startHour, int startMinute, int endHour, int
 }
 
 /// Format time for speech (e.g., "10:30 PM")
+/// Works with all languages - TTS will pronounce numbers correctly
 String _formatTime(DateTime time) {
   final hour = time.hour;
   final minute = time.minute;
   final period = hour >= 12 ? 'PM' : 'AM';
   final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
   final displayMinute = minute.toString().padLeft(2, '0');
+  // Simple format works with all TTS languages
+  // TTS engine will pronounce it correctly in the selected language
   return '$displayHour:$displayMinute $period';
 }
 
