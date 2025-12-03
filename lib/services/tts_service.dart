@@ -1,33 +1,24 @@
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
-/// Text-to-Speech Service for TimeTalk
-/// Handles all voice output functionality with accessibility focus
-/// 
-/// This service provides:
-/// - Time announcements
-/// - Settings feedback
-/// - Language support
-/// - Volume and rate control
+/// Text-to-Speech Service for Talk Time
+/// Simple approach: set language, speak numbers - TTS does the rest
 
 class TtsService extends ChangeNotifier {
   final FlutterTts _flutterTts = FlutterTts();
   
-  // TTS Settings
   double _volume = 1.0;
   double _rate = 0.5;
   double _pitch = 1.0;
   String _language = 'en-US';
-  List<dynamic> _availableLanguages = [];
   bool _isInitialized = false;
   bool _isSpeaking = false;
   
-  // Getters
   double get volume => _volume;
   double get rate => _rate;
   double get pitch => _pitch;
   String get language => _language;
-  List<dynamic> get availableLanguages => _availableLanguages;
   bool get isInitialized => _isInitialized;
   bool get isSpeaking => _isSpeaking;
   
@@ -35,10 +26,8 @@ class TtsService extends ChangeNotifier {
     _initTts();
   }
   
-  /// Initialize TTS engine with default settings
   Future<void> _initTts() async {
     try {
-      // Set up completion handlers
       _flutterTts.setStartHandler(() {
         _isSpeaking = true;
         notifyListeners();
@@ -52,106 +41,89 @@ class TtsService extends ChangeNotifier {
       _flutterTts.setErrorHandler((msg) {
         _isSpeaking = false;
         debugPrint('TTS Error: $msg');
-        notifyListeners();
       });
       
-      // Get available languages
-      _availableLanguages = await _flutterTts.getLanguages ?? [];
-      
-      // Apply initial settings
-      await _applySettings();
-      
+      await _applyAllSettings();
       _isInitialized = true;
       notifyListeners();
     } catch (e) {
-      debugPrint('TTS initialization error: $e');
+      debugPrint('TTS init error: $e');
     }
   }
   
-  /// Apply current settings to TTS engine
-  Future<void> _applySettings() async {
+  Future<void> _applyAllSettings() async {
     await _flutterTts.setVolume(_volume);
     await _flutterTts.setSpeechRate(_rate);
     await _flutterTts.setPitch(_pitch);
     await _flutterTts.setLanguage(_language);
-    
-    // Android-specific settings for better accessibility
-    // These may not be available on all platforms
-    try {
-      await _flutterTts.setQueueMode(1); // Add to queue instead of flushing
-      await _flutterTts.awaitSpeakCompletion(true);
-    } catch (e) {
-      // Ignore if not supported on this platform
-      debugPrint('TTS platform-specific settings not available: $e');
-    }
+    debugPrint('TTS settings applied: lang=$_language, vol=$_volume, rate=$_rate');
   }
   
-  /// Speak the given text
-  /// Primary method for all voice output
+  /// Speak text - language must already be set
   Future<void> speak(String text) async {
-    if (!_isInitialized) {
-      await _initTts();
-    }
+    if (!_isInitialized) await _initTts();
     
     try {
+      // Make sure language is set before speaking
+      await _flutterTts.setLanguage(_language);
       await _flutterTts.speak(text);
+      debugPrint('TTS speaking "$text" in $_language');
     } catch (e) {
       debugPrint('TTS speak error: $e');
     }
   }
   
-  /// Speak the current time
-  /// Formats and announces the time clearly
-  Future<void> speakTime(String formattedTime) async {
-    await speak(formattedTime);
-  }
-  
-  /// Stop any ongoing speech
   Future<void> stop() async {
-    try {
-      await _flutterTts.stop();
-      _isSpeaking = false;
-      notifyListeners();
-    } catch (e) {
-      debugPrint('TTS stop error: $e');
-    }
+    await _flutterTts.stop();
+    _isSpeaking = false;
+    notifyListeners();
   }
   
-  /// Set volume (0.0 to 1.0)
   Future<void> setVolume(double value) async {
     _volume = value.clamp(0.0, 1.0);
     await _flutterTts.setVolume(_volume);
     notifyListeners();
   }
   
-  /// Set speech rate (0.0 to 1.0)
-  /// 0.5 is normal speed
   Future<void> setRate(double value) async {
     _rate = value.clamp(0.0, 1.0);
     await _flutterTts.setSpeechRate(_rate);
     notifyListeners();
   }
   
-  /// Set pitch (0.5 to 2.0)
   Future<void> setPitch(double value) async {
     _pitch = value.clamp(0.5, 2.0);
     await _flutterTts.setPitch(_pitch);
     notifyListeners();
   }
   
-  /// Set language
+  /// Set language for TTS
   Future<void> setLanguage(String languageCode) async {
     _language = languageCode;
-    await _flutterTts.setLanguage(_language);
+    debugPrint('TTS language set to: $languageCode');
+    
+    try {
+      await _flutterTts.stop();
+      final result = await _flutterTts.setLanguage(languageCode);
+      debugPrint('TTS setLanguage result: $result');
+    } catch (e) {
+      debugPrint('TTS setLanguage error: $e');
+    }
     notifyListeners();
   }
   
-  /// Test voice with sample text
+  /// Test voice - say localized time using intl DateFormat
   Future<void> testVoice() async {
-    await speak('12:30 PM');
+    final sampleTime = DateTime(2024, 1, 1, 12, 30);
+    try {
+      String locale = _language.replaceAll('-', '_');
+      final formatted = DateFormat.jm(locale).format(sampleTime);
+      await speak(formatted);
+    } catch (e) {
+      await speak('12:30 PM');
+    }
   }
   
-  /// Load settings from stored preferences
   void loadSettings({
     required double volume,
     required double rate,
@@ -160,7 +132,7 @@ class TtsService extends ChangeNotifier {
     _volume = volume;
     _rate = rate;
     _language = language;
-    _applySettings();
+    _applyAllSettings();
     notifyListeners();
   }
   
@@ -170,4 +142,3 @@ class TtsService extends ChangeNotifier {
     super.dispose();
   }
 }
-

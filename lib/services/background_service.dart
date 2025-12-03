@@ -7,6 +7,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vibration/vibration.dart';
+import 'package:intl/intl.dart';
 
 /// Background Service for Talk Time
 /// Runs 24/7 and announces time at set intervals
@@ -312,7 +313,7 @@ void onStart(ServiceInstance service) async {
     
     // TIME TO ANNOUNCE!
     lastAnnouncement = now;
-    final timeString = _formatTime(now);
+    final timeString = _formatTimeSimple(now, language);
     
     // Vibrate if enabled
     if (vibrationEnabled) {
@@ -345,17 +346,19 @@ bool _isQuietTime(DateTime now, int startHour, int startMinute, int endHour, int
   }
 }
 
-/// Format time for speech (e.g., "10:30 PM")
-/// Works with all languages - TTS will pronounce numbers correctly
-String _formatTime(DateTime time) {
-  final hour = time.hour;
-  final minute = time.minute;
-  final period = hour >= 12 ? 'PM' : 'AM';
-  final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-  final displayMinute = minute.toString().padLeft(2, '0');
-  // Simple format works with all TTS languages
-  // TTS engine will pronounce it correctly in the selected language
-  return '$displayHour:$displayMinute $period';
+/// Format time for speech using intl package for correct localization
+/// This ensures proper 12h/24h format and localized AM/PM for each language
+String _formatTimeSimple(DateTime time, String language) {
+  try {
+    // Convert language code format: 'es-ES' -> 'es_ES' for intl
+    String locale = language.replaceAll('-', '_');
+    
+    // DateFormat.jm() creates localized time with hour:minute AM/PM
+    return DateFormat.jm(locale).format(time);
+  } catch (e) {
+    // Fallback to English if locale not supported
+    return DateFormat.jm('en_US').format(time);
+  }
 }
 
 /// Update the foreground notification

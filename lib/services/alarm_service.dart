@@ -73,6 +73,8 @@ class AlarmService extends ChangeNotifier {
       // Vibrate if enabled (reload from prefs)
       final prefs = await SharedPreferences.getInstance();
       final vibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
+      final language = prefs.getString('language') ?? 'en-US';
+      
       if (vibrationEnabled) {
         final hasVibrator = await Vibration.hasVibrator() ?? false;
         if (hasVibrator) {
@@ -80,7 +82,8 @@ class AlarmService extends ChangeNotifier {
         }
       }
       
-      final timeText = TimeUtils.formatTimeForSpeech(now);
+      // Format time in the selected language
+      final timeText = TimeUtils.formatTimeForSpeech(now, language: language);
       onAnnounce?.call(timeText);
     });
   }

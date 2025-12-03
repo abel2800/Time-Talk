@@ -8,6 +8,7 @@ import '../services/alarm_service.dart';
 import '../services/settings_provider.dart';
 import '../utils/time_utils.dart';
 import '../widgets/analog_clock.dart';
+import '../l10n/app_localizations.dart';
 import 'settings_screen.dart';
 
 /// Home Screen for TimeTalk
@@ -94,8 +95,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       }
     }
 
-    // Speak the time
-    final timeText = TimeUtils.formatTimeForSpeech(_currentTime);
+    // Speak the time in the selected language
+    final timeText = TimeUtils.formatTimeForSpeech(_currentTime, language: settings.language);
     await ttsService.speak(timeText);
   }
 
@@ -282,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         if (isQuiet) ...[
           _buildStatusChip(
             icon: Icons.nights_stay_rounded,
-            label: 'Quiet Mode',
+            label: AppLocalizations.of(context).quietMode,
             color: Colors.indigo,
             settings: settings,
           ),
@@ -293,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         if (alarmService.intervalMinutes > 0) ...[
           _buildStatusChip(
             icon: Icons.timer_outlined,
-            label: 'Every ${alarmService.intervalMinutes}m',
+            label: '${AppLocalizations.of(context).every} ${alarmService.intervalMinutes}${AppLocalizations.of(context).minutes}',
             color: const Color(0xFF00BFA5),
             settings: settings,
           ),
@@ -358,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
             const SizedBox(width: 10),
             Text(
-              'Tap anywhere to hear time',
+              AppLocalizations.of(context).tapToHearTime,
               style: TextStyle(
                 fontSize: 16,
                 color: settings.darkMode

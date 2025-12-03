@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'services/tts_service.dart';
 import 'services/alarm_service.dart';
 import 'services/settings_provider.dart';
 import 'services/background_service.dart';
 import 'screens/home_screen.dart';
+import 'l10n/app_localizations.dart';
 
 /// Talk Time - Voice-based Clock Assistant
-/// Announces time at set intervals 24/7
+/// Full multi-language support
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -100,6 +102,9 @@ class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();
     
+    // Get locale from language setting
+    final locale = _getLocaleFromLanguage(settings.language);
+    
     if (!_isInitialized) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -136,7 +141,59 @@ class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> {
       title: 'Talk Time',
       debugShowCheckedModeBanner: false,
       theme: settings.getTheme(),
+      
+      // Localization support
+      locale: locale,
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('es', 'ES'),
+        Locale('fr', 'FR'),
+        Locale('de', 'DE'),
+        Locale('ar', 'SA'),
+        Locale('zh', 'CN'),
+        Locale('hi', 'IN'),
+        Locale('ja', 'JP'),
+        Locale('ko', 'KR'),
+        Locale('pt', 'BR'),
+        Locale('it', 'IT'),
+      ],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      
       home: const HomeScreen(),
     );
+  }
+  
+  Locale _getLocaleFromLanguage(String language) {
+    switch (language) {
+      case 'es-ES':
+        return const Locale('es', 'ES');
+      case 'fr-FR':
+        return const Locale('fr', 'FR');
+      case 'de-DE':
+        return const Locale('de', 'DE');
+      case 'ar-SA':
+        return const Locale('ar', 'SA');
+      case 'zh-CN':
+        return const Locale('zh', 'CN');
+      case 'hi-IN':
+        return const Locale('hi', 'IN');
+      case 'ja-JP':
+        return const Locale('ja', 'JP');
+      case 'ko-KR':
+        return const Locale('ko', 'KR');
+      case 'pt-BR':
+        return const Locale('pt', 'BR');
+      case 'it-IT':
+        return const Locale('it', 'IT');
+      case 'en-GB':
+      case 'en-US':
+      default:
+        return const Locale('en', 'US');
+    }
   }
 }
