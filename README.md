@@ -55,9 +55,9 @@ This app was created with accessibility as the primary focus, featuring:
 ## 🚀 Installation
 
 ### Download APK
-📥 **[Download Talk Time v1.0.0 (APK)](https://github.com/abel2800/Time-Talk/releases/download/v1.0.0/TalkTime-v1.0.0.apk)**
+📥 **[Download Talk Time APK](https://github.com/abel2800/Time-Talk/releases/latest)**
 
-Or visit the [Releases](https://github.com/abel2800/Time-Talk/releases) page for all versions.
+Click the link above, then download the `.apk` file.
 
 #### How to Install:
 1. Download the APK file on your Android phone
