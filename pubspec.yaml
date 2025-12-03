@@ -1,0 +1,39 @@
+name: timetalk
+description: Talk Time - Voice-based clock assistant for blind and visually impaired users
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Text-to-Speech for voice announcements
+  flutter_tts: ^4.0.2
+  
+  # Persistent storage for settings
+  shared_preferences: ^2.2.2
+  
+  # State management
+  provider: ^6.1.1
+  
+  # For foreground service and notifications
+  flutter_local_notifications: ^17.0.0
+  
+  # For battery optimization permission
+  permission_handler: ^11.3.0
+  
+  # Cupertino icons
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true

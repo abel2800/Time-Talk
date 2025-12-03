@@ -1,0 +1,23 @@
+# This file configures the analyzer for TimeTalk
+
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Avoid print statements in production code
+    avoid_print: false
+    
+    # Prefer const constructors when possible
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    
+    # Ensure proper null safety
+    avoid_null_checks_in_equality_operators: true
+    
+    # Accessibility considerations
+    sort_child_properties_last: true
+    
+    # Clean code practices
+    prefer_final_locals: true
+    unnecessary_this: true
+

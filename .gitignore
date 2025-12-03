@@ -1,0 +1,53 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+
+# IDE
+.idea/
+*.swp
+*.swo
+.vscode/
+
+# Android
+android/.gradle/
+android/app/debug/
+android/app/profile/
+android/app/release/
+android/gradle-wrapper.jar
+android/local.properties
+*.jks
+*.keystore
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Windows
+windows/flutter/ephemeral/
+
+# Linux
+linux/flutter/ephemeral/
+
+# macOS
+macos/Flutter/ephemeral/
+macos/Pods/
+
+# Web
+web/.dart_tool/
+
+# Coverage
+coverage/
+
+# Symbols
+app.*.symbols
+
+# Exceptions
+!/android/gradle/wrapper/gradle-wrapper.jar
