@@ -99,6 +99,20 @@ class BackgroundService {
     });
   }
 
+  /// Update voice settings (language, volume, rate)
+  static void updateVoiceSettings({
+    required String language,
+    required double volume,
+    required double rate,
+  }) {
+    final service = FlutterBackgroundService();
+    service.invoke('updateVoiceSettings', {
+      'language': language,
+      'volume': volume,
+      'rate': rate,
+    });
+  }
+
   /// Request battery optimization exemption
   static Future<bool> requestBatteryOptimization(BuildContext context) async {
     final status = await Permission.ignoreBatteryOptimizations.status;
@@ -217,6 +231,27 @@ void onStart(ServiceInstance service) async {
       quietEndHour = event['endHour'] as int;
       quietEndMinute = event['endMinute'] as int;
       _updateNotification(service, notifications, intervalMinutes, quietEnabled);
+    }
+  });
+
+  service.on('updateVoiceSettings').listen((event) async {
+    if (event != null) {
+      final newLanguage = event['language'] as String;
+      final newVolume = event['volume'] as double;
+      final newRate = event['rate'] as double;
+      
+      language = newLanguage;
+      volume = newVolume;
+      rate = newRate;
+      
+      await tts.setLanguage(language);
+      await tts.setVolume(volume);
+      await tts.setSpeechRate(rate);
+      
+      // Save to prefs
+      await prefs.setString('language', language);
+      await prefs.setDouble('volume', volume);
+      await prefs.setDouble('rate', rate);
     }
   });
 

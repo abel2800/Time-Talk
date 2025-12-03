@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../services/tts_service.dart';
 import '../services/alarm_service.dart';
 import '../services/settings_provider.dart';
+import '../services/background_service.dart';
 import '../utils/time_utils.dart';
 
 /// Settings Screen for TimeTalk
@@ -107,6 +108,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onChanged: (value) {
               settings.setVolume(value);
               ttsService.setVolume(value);
+              // Update background service
+              BackgroundService.updateVoiceSettings(
+                language: settings.language,
+                volume: value,
+                rate: settings.rate,
+              );
             },
             settings: settings,
           ),
@@ -125,6 +132,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onChanged: (value) {
               settings.setRate(value);
               ttsService.setRate(value);
+              // Update background service
+              BackgroundService.updateVoiceSettings(
+                language: settings.language,
+                volume: settings.volume,
+                rate: value,
+              );
             },
             settings: settings,
           ),
@@ -422,6 +435,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       if (value != null) {
                         settings.setLanguage(value);
                         ttsService.setLanguage(value);
+                        // Update background service immediately
+                        BackgroundService.updateVoiceSettings(
+                          language: value,
+                          volume: settings.volume,
+                          rate: settings.rate,
+                        );
                       }
                     },
                   ),
