@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibration/vibration.dart';
 import '../utils/time_utils.dart';
 import 'background_service.dart';
 
@@ -51,7 +52,7 @@ class AlarmService extends ChangeNotifier {
     
     _lastAnnouncement = DateTime.now();
     
-    _announcementTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+    _announcementTimer = Timer.periodic(const Duration(seconds: 30), (_) async {
       if (_intervalMinutes <= 0) return;
       
       final now = DateTime.now();
@@ -68,6 +69,17 @@ class AlarmService extends ChangeNotifier {
       }
       
       _lastAnnouncement = now;
+      
+      // Vibrate if enabled (reload from prefs)
+      final prefs = await SharedPreferences.getInstance();
+      final vibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
+      if (vibrationEnabled) {
+        final hasVibrator = await Vibration.hasVibrator() ?? false;
+        if (hasVibrator) {
+          Vibration.vibrate(duration: 200);
+        }
+      }
+      
       final timeText = TimeUtils.formatTimeForSpeech(now);
       onAnnounce?.call(timeText);
     });

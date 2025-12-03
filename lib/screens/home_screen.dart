@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 import '../services/tts_service.dart';
 import '../services/alarm_service.dart';
 import '../services/settings_provider.dart';
@@ -71,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  /// Speak the current time with haptic feedback
+  /// Speak the current time with vibration feedback
   Future<void> _speakTime() async {
     final settings = context.read<SettingsProvider>();
     final alarmService = context.read<AlarmService>();
@@ -85,9 +86,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       return;
     }
 
-    // Provide haptic feedback if enabled (using Flutter's built-in HapticFeedback)
+    // Provide vibration feedback if enabled
     if (settings.vibrationEnabled) {
-      HapticFeedback.mediumImpact();
+      final hasVibrator = await Vibration.hasVibrator() ?? false;
+      if (hasVibrator) {
+        Vibration.vibrate(duration: 200);
+      }
     }
 
     // Speak the time

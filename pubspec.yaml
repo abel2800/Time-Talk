@@ -31,6 +31,9 @@ dependencies:
   # For battery optimization permission
   permission_handler: ^11.3.0
   
+  # For vibration feedback
+  vibration: ^2.0.0
+  
   # Cupertino icons
   cupertino_icons: ^1.0.6
 

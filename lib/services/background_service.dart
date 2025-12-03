@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:vibration/vibration.dart';
 
 /// Background Service for Talk Time
 /// Runs 24/7 and announces time at set intervals
@@ -191,6 +192,7 @@ void onStart(ServiceInstance service) async {
   int quietStartMinute = prefs.getInt('quietStartMinute') ?? 0;
   int quietEndHour = prefs.getInt('quietEndHour') ?? 7;
   int quietEndMinute = prefs.getInt('quietEndMinute') ?? 0;
+  bool vibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
   
   DateTime? lastAnnouncement;
   
@@ -231,6 +233,7 @@ void onStart(ServiceInstance service) async {
     quietStartMinute = prefs.getInt('quietStartMinute') ?? 0;
     quietEndHour = prefs.getInt('quietEndHour') ?? 7;
     quietEndMinute = prefs.getInt('quietEndMinute') ?? 0;
+    vibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
     
     if (intervalMinutes <= 0) return;
     
@@ -252,6 +255,14 @@ void onStart(ServiceInstance service) async {
     // TIME TO ANNOUNCE!
     lastAnnouncement = now;
     final timeString = _formatTime(now);
+    
+    // Vibrate if enabled
+    if (vibrationEnabled) {
+      final hasVibrator = await Vibration.hasVibrator() ?? false;
+      if (hasVibrator) {
+        Vibration.vibrate(duration: 200);
+      }
+    }
     
     // Speak the time
     await tts.speak(timeString);
