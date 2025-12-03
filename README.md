@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="#features">Features</a> •
+  <a href="#screenshots">Screenshots</a> •
   <a href="#installation">Installation</a> •
   <a href="#usage">Usage</a> •
   <a href="#license">License</a>
@@ -38,6 +39,18 @@ This app was created with accessibility as the primary focus, featuring:
 - **🌐 Multi-Language** - Support for multiple languages
 - **🔋 Battery Efficient** - Optimized for low battery consumption
 - **🔊 Adjustable Voice** - Control volume and speech speed
+
+## 📸 Screenshots
+
+<p align="center">
+  <img src="screenshots/home_screen.jpg" alt="Home Screen" width="250"/>
+  <img src="screenshots/settings_intervals.jpg" alt="Auto Announcements" width="250"/>
+</p>
+
+<p align="center">
+  <img src="screenshots/settings_voice.jpg" alt="Voice Settings" width="250"/>
+  <img src="screenshots/settings_quiet.jpg" alt="Quiet Hours" width="250"/>
+</p>
 
 ## 🚀 Installation
 
