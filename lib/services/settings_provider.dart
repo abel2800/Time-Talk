@@ -25,6 +25,9 @@ class SettingsProvider extends ChangeNotifier {
   double _rate = 0.5;
   String _language = 'en-US';
   
+  // Repeat settings - how many times to say the time
+  int _repeatCount = 2; // Default: say time twice
+  
   // Getters
   bool get touchToSpeakEnabled => _touchToSpeakEnabled;
   bool get vibrationEnabled => _vibrationEnabled;
@@ -33,6 +36,7 @@ class SettingsProvider extends ChangeNotifier {
   double get volume => _volume;
   double get rate => _rate;
   String get language => _language;
+  int get repeatCount => _repeatCount;
   
   /// Set touch-to-speak enabled
   void setTouchToSpeakEnabled(bool value) {
@@ -83,6 +87,13 @@ class SettingsProvider extends ChangeNotifier {
     _saveSettings();
   }
   
+  /// Set repeat count (how many times to say the time)
+  void setRepeatCount(int value) {
+    _repeatCount = value.clamp(1, 5); // 1 to 5 times
+    notifyListeners();
+    _saveSettings();
+  }
+  
   /// Save all settings to shared preferences
   Future<void> _saveSettings() async {
     final prefs = await SharedPreferences.getInstance();
@@ -93,6 +104,7 @@ class SettingsProvider extends ChangeNotifier {
     await prefs.setDouble('volume', _volume);
     await prefs.setDouble('rate', _rate);
     await prefs.setString('language', _language);
+    await prefs.setInt('repeatCount', _repeatCount);
   }
   
   /// Load all settings from shared preferences
@@ -105,6 +117,7 @@ class SettingsProvider extends ChangeNotifier {
     _volume = prefs.getDouble('volume') ?? 1.0;
     _rate = prefs.getDouble('rate') ?? 0.5;
     _language = prefs.getString('language') ?? 'en-US';
+    _repeatCount = prefs.getInt('repeatCount') ?? 2; // Default: twice
     notifyListeners();
   }
   

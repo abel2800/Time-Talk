@@ -9,6 +9,7 @@
     <!-- Background Service Permissions -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     
     <!-- Notification Permission (Android 13+) -->
@@ -20,6 +21,9 @@
     <!-- Alarm Permissions -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
+    
+    <!-- Audio Focus for screen-off TTS -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     
     <application
         android:label="Talk Time"

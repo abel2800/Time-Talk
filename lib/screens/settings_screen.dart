@@ -93,6 +93,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildSectionHeader(l10n.autoAnnouncements, Icons.alarm_rounded, settings),
           const SizedBox(height: 12),
           _buildIntervalCard(alarmService, l10n, settings),
+          const SizedBox(height: 12),
+          _buildRepeatCountCard(settings, l10n),
           const SizedBox(height: 24),
           
           // Quiet Hours
@@ -416,6 +418,64 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  Widget _buildRepeatCountCard(SettingsProvider settings, AppLocalizations l10n) {
+    final repeatOptions = [
+      {'value': 1, 'label': l10n.once},
+      {'value': 2, 'label': l10n.twice},
+      {'value': 3, 'label': l10n.threeTimes},
+      {'value': 4, 'label': l10n.fourTimes},
+      {'value': 5, 'label': l10n.fiveTimes},
+    ];
+    
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.repeatCount, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            const SizedBox(height: 4),
+            Text(l10n.howManyTimes, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: repeatOptions.map((option) {
+                final isSelected = settings.repeatCount == option['value'];
+                return InkWell(
+                  onTap: () {
+                    settings.setRepeatCount(option['value'] as int);
+                    BackgroundService.updateRepeatCount(option['value'] as int);
+                  },
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: isSelected ? const Color(0xFF00BFA5).withOpacity(0.2) : Colors.transparent,
+                      border: Border.all(
+                        color: isSelected ? const Color(0xFF00BFA5) : (settings.darkMode ? Colors.grey[700]! : Colors.grey[300]!),
+                        width: isSelected ? 2 : 1,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      option['label'] as String,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected ? const Color(0xFF00BFA5) : null,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildAboutCard(AppLocalizations l10n, SettingsProvider settings) {
     return Card(
       child: Padding(
@@ -426,7 +486,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(l10n.version, style: const TextStyle(fontSize: 16)),
-                const Text('1.0.0', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const Text('1.1.0', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 16),

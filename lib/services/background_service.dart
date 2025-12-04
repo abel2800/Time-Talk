@@ -114,6 +114,12 @@ class BackgroundService {
     });
   }
 
+  /// Update repeat count
+  static void updateRepeatCount(int count) {
+    final service = FlutterBackgroundService();
+    service.invoke('updateRepeatCount', {'count': count});
+  }
+
   /// Request battery optimization exemption
   static Future<bool> requestBatteryOptimization(BuildContext context) async {
     final status = await Permission.ignoreBatteryOptimizations.status;
@@ -206,11 +212,19 @@ void onStart(ServiceInstance service) async {
   String language = prefs.getString('language') ?? 'en-US';
   double volume = prefs.getDouble('volume') ?? 1.0;
   double rate = prefs.getDouble('rate') ?? 0.5;
+  int repeatCount = prefs.getInt('repeatCount') ?? 2; // Default: say time twice
   
   // Initialize TTS with saved settings
   await tts.setLanguage(language);
   await tts.setSpeechRate(rate);
   await tts.setVolume(volume);
+  
+  // Enable TTS to work when screen is off (Android)
+  try {
+    await tts.awaitSpeakCompletion(true);
+  } catch (e) {
+    // Ignore if not supported
+  }
   
   DateTime? lastAnnouncement;
   
@@ -256,6 +270,13 @@ void onStart(ServiceInstance service) async {
     }
   });
 
+  service.on('updateRepeatCount').listen((event) {
+    if (event != null) {
+      repeatCount = event['count'] as int;
+      prefs.setInt('repeatCount', repeatCount);
+    }
+  });
+
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
@@ -274,6 +295,7 @@ void onStart(ServiceInstance service) async {
     quietEndHour = prefs.getInt('quietEndHour') ?? 7;
     quietEndMinute = prefs.getInt('quietEndMinute') ?? 0;
     vibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
+    repeatCount = prefs.getInt('repeatCount') ?? 2;
     
     // Reload voice settings
     final newLanguage = prefs.getString('language') ?? 'en-US';
@@ -323,11 +345,15 @@ void onStart(ServiceInstance service) async {
       }
     }
     
-    // Speak the time
-    await tts.speak(timeString);
+    // Speak the time multiple times based on repeatCount setting
+    for (int i = 0; i < repeatCount; i++) {
+      await tts.speak(timeString);
+      // Wait for speech to complete before repeating
+      await Future.delayed(const Duration(milliseconds: 2500));
+    }
     
     // Update notification with last announcement time
-    _updateNotification(service, notifications, intervalMinutes, quietEnabled, lastSpoken: timeString);
+    _updateNotification(service, notifications, intervalMinutes, quietEnabled, repeatCount: repeatCount, lastSpoken: timeString);
   });
 }
 
@@ -367,15 +393,16 @@ void _updateNotification(
   FlutterLocalNotificationsPlugin notifications,
   int intervalMinutes,
   bool quietEnabled, {
+  int repeatCount = 2,
   String? lastSpoken,
 }) {
   String content;
   if (intervalMinutes <= 0) {
     content = 'Tap to set announcement interval';
   } else {
-    content = 'Announcing every $intervalMinutes min';
+    content = 'Every $intervalMinutes min × $repeatCount';
     if (quietEnabled) {
-      content += ' (Quiet hours enabled)';
+      content += ' (Quiet on)';
     }
     if (lastSpoken != null) {
       content += '\nLast: $lastSpoken';

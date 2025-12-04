@@ -82,9 +82,19 @@ class AlarmService extends ChangeNotifier {
         }
       }
       
+      // Get repeat count setting
+      final repeatCount = prefs.getInt('repeatCount') ?? 2;
+      
       // Format time in the selected language
       final timeText = TimeUtils.formatTimeForSpeech(now, language: language);
-      onAnnounce?.call(timeText);
+      
+      // Announce time based on repeat count
+      for (int i = 0; i < repeatCount; i++) {
+        onAnnounce?.call(timeText);
+        if (i < repeatCount - 1) {
+          await Future.delayed(const Duration(milliseconds: 2500));
+        }
+      }
     });
   }
   

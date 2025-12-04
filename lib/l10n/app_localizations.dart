@@ -60,6 +60,13 @@ class AppLocalizations {
       'quietMode': 'Quiet Mode',
       'every': 'Every',
       'minutes': 'm',
+      'repeatCount': 'Repeat Count',
+      'howManyTimes': 'How many times to say the time',
+      'once': 'Once',
+      'twice': 'Twice',
+      'threeTimes': '3 times',
+      'fourTimes': '4 times',
+      'fiveTimes': '5 times',
     },
     'es': {
       'appName': 'Hora Hablada',
@@ -105,6 +112,13 @@ class AppLocalizations {
       'quietMode': 'Modo Silencio',
       'every': 'Cada',
       'minutes': 'm',
+      'repeatCount': 'Repeticiones',
+      'howManyTimes': 'Cuántas veces decir la hora',
+      'once': 'Una vez',
+      'twice': 'Dos veces',
+      'threeTimes': '3 veces',
+      'fourTimes': '4 veces',
+      'fiveTimes': '5 veces',
     },
     'fr': {
       'appName': 'Heure Parlante',
@@ -150,6 +164,13 @@ class AppLocalizations {
       'quietMode': 'Mode Silencieux',
       'every': 'Toutes les',
       'minutes': 'm',
+      'repeatCount': 'Répétitions',
+      'howManyTimes': 'Combien de fois dire l\'heure',
+      'once': 'Une fois',
+      'twice': 'Deux fois',
+      'threeTimes': '3 fois',
+      'fourTimes': '4 fois',
+      'fiveTimes': '5 fois',
     },
     'de': {
       'appName': 'Sprechende Uhr',
@@ -195,6 +216,13 @@ class AppLocalizations {
       'quietMode': 'Ruhemodus',
       'every': 'Alle',
       'minutes': 'm',
+      'repeatCount': 'Wiederholungen',
+      'howManyTimes': 'Wie oft die Zeit ansagen',
+      'once': 'Einmal',
+      'twice': 'Zweimal',
+      'threeTimes': '3 mal',
+      'fourTimes': '4 mal',
+      'fiveTimes': '5 mal',
     },
     'ar': {
       'appName': 'الساعة الناطقة',
@@ -240,6 +268,13 @@ class AppLocalizations {
       'quietMode': 'وضع الهدوء',
       'every': 'كل',
       'minutes': 'د',
+      'repeatCount': 'عدد التكرار',
+      'howManyTimes': 'كم مرة لقول الوقت',
+      'once': 'مرة واحدة',
+      'twice': 'مرتين',
+      'threeTimes': '3 مرات',
+      'fourTimes': '4 مرات',
+      'fiveTimes': '5 مرات',
     },
     'zh': {
       'appName': '语音报时',
@@ -285,6 +320,13 @@ class AppLocalizations {
       'quietMode': '静音模式',
       'every': '每',
       'minutes': '分钟',
+      'repeatCount': '重复次数',
+      'howManyTimes': '报时重复几次',
+      'once': '一次',
+      'twice': '两次',
+      'threeTimes': '三次',
+      'fourTimes': '四次',
+      'fiveTimes': '五次',
     },
     'hi': {
       'appName': 'बोलती घड़ी',
@@ -330,6 +372,13 @@ class AppLocalizations {
       'quietMode': 'शांत मोड',
       'every': 'हर',
       'minutes': 'मिनट',
+      'repeatCount': 'दोहराव',
+      'howManyTimes': 'समय कितनी बार बोलें',
+      'once': 'एक बार',
+      'twice': 'दो बार',
+      'threeTimes': '3 बार',
+      'fourTimes': '4 बार',
+      'fiveTimes': '5 बार',
     },
     'ja': {
       'appName': '音声時計',
@@ -375,6 +424,13 @@ class AppLocalizations {
       'quietMode': '静音モード',
       'every': '毎',
       'minutes': '分',
+      'repeatCount': '繰り返し回数',
+      'howManyTimes': '時刻を何回読み上げるか',
+      'once': '1回',
+      'twice': '2回',
+      'threeTimes': '3回',
+      'fourTimes': '4回',
+      'fiveTimes': '5回',
     },
     'ko': {
       'appName': '말하는 시계',
@@ -420,6 +476,13 @@ class AppLocalizations {
       'quietMode': '무음 모드',
       'every': '매',
       'minutes': '분',
+      'repeatCount': '반복 횟수',
+      'howManyTimes': '시간을 몇 번 말할지',
+      'once': '1번',
+      'twice': '2번',
+      'threeTimes': '3번',
+      'fourTimes': '4번',
+      'fiveTimes': '5번',
     },
     'pt': {
       'appName': 'Hora Falada',
@@ -465,6 +528,13 @@ class AppLocalizations {
       'quietMode': 'Modo Silencioso',
       'every': 'A cada',
       'minutes': 'min',
+      'repeatCount': 'Repetições',
+      'howManyTimes': 'Quantas vezes dizer a hora',
+      'once': 'Uma vez',
+      'twice': 'Duas vezes',
+      'threeTimes': '3 vezes',
+      'fourTimes': '4 vezes',
+      'fiveTimes': '5 vezes',
     },
     'it': {
       'appName': 'Ora Parlante',
@@ -510,6 +580,13 @@ class AppLocalizations {
       'quietMode': 'Modalità Silenziosa',
       'every': 'Ogni',
       'minutes': 'min',
+      'repeatCount': 'Ripetizioni',
+      'howManyTimes': 'Quante volte dire l\'ora',
+      'once': 'Una volta',
+      'twice': 'Due volte',
+      'threeTimes': '3 volte',
+      'fourTimes': '4 volte',
+      'fiveTimes': '5 volte',
     },
   };
   
@@ -569,6 +646,13 @@ class AppLocalizations {
   String get quietMode => get('quietMode');
   String get every => get('every');
   String get minutes => get('minutes');
+  String get repeatCount => get('repeatCount');
+  String get howManyTimes => get('howManyTimes');
+  String get once => get('once');
+  String get twice => get('twice');
+  String get threeTimes => get('threeTimes');
+  String get fourTimes => get('fourTimes');
+  String get fiveTimes => get('fiveTimes');
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
