@@ -1,138 +1,235 @@
-# 🕐 Talk Time - Voice Clock for the Visually Impaired
+# 🕐 Talk Time
 
 <p align="center">
-  <img src="screenshots/icon.png" alt="Talk Time Logo" width="200"/>
+  <img src="screenshots/icon.png" alt="Talk Time Logo" width="180"/>
+</p>
+
+<h3 align="center">Voice Clock for the Visually Impaired</h3>
+
+<p align="center">
+  <strong>Tap anywhere to hear the time • Automatic announcements • Works 24/7</strong>
 </p>
 
 <p align="center">
-  <strong>A voice-based clock assistant designed for blind and visually impaired users</strong>
-</p>
-
-<p align="center">
-  <a href="#features">Features</a> •
-  <a href="#screenshots">Screenshots</a> •
-  <a href="#installation">Installation</a> •
-  <a href="#usage">Usage</a> •
-  <a href="#license">License</a>
+  <a href="https://github.com/abel2800/Time-Talk/releases/latest">
+    <img src="https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android" alt="Download APK"/>
+  </a>
+  <img src="https://img.shields.io/badge/Version-1.2.0-blue?style=for-the-badge" alt="Version"/>
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License"/>
 </p>
 
 ---
 
-## 📱 About
+## 📱 What is Talk Time?
 
-**Talk Time** is a smartphone application that helps blind and visually impaired people know the time without needing extra help. Simply tap anywhere on the screen to hear the current time spoken aloud, or set automatic announcements at regular intervals.
+**Talk Time** is a smartphone app designed specifically for **blind and visually impaired users** to know the time independently. No need to ask anyone - just tap your phone screen and hear the time spoken aloud!
 
-This app was created with accessibility as the primary focus, featuring:
-- Large touch areas for easy interaction
-- High contrast design
-- Full voice feedback
-- Works 24/7 in the background
+### Why I Made This App
 
-## ✨ Features
+Many visually impaired people rely on others to tell them the time. This app gives them independence by:
+- Speaking the time with a single tap
+- Automatically announcing time at regular intervals
+- Working silently during sleep hours
+- Running 24/7 in the background
 
-- **🎯 Tap to Hear** - Touch anywhere on the screen to hear the current time
-- **⏰ Auto Announcements** - Set automatic time announcements every 15, 30, or 60 minutes
-- **🌙 Quiet Hours** - Disable announcements during sleeping hours (e.g., 10 PM - 7 AM)
-- **🔔 Background Operation** - Works even when the app is minimized or closed
-- **🎨 Beautiful Clock** - Analog wall clock with digital display
-- **📳 Haptic Feedback** - Feel a vibration when time is spoken
-- **🌐 Multi-Language** - Support for multiple languages
-- **🔋 Battery Efficient** - Optimized for low battery consumption
-- **🔊 Adjustable Voice** - Control volume and speech speed
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|---------|-------------|
+| 🎯 **Tap to Hear** | Touch anywhere on screen to hear current time |
+| ⏱️ **Auto Announce** | Automatic time announcements every 15, 30, or 60 minutes |
+| 🔄 **Repeat Count** | Say time 1-5 times so users don't miss it |
+| 🌙 **Quiet Hours** | Disable announcements during sleep (e.g., 10 PM - 7 AM) |
+| 🔔 **24/7 Background** | Works even when phone is locked or screen is off |
+| 📳 **Vibration** | Feel a vibration when time is announced |
+| 🌐 **11 Languages** | English, Spanish, French, German, Italian, Portuguese, Chinese, Japanese, Korean, Hindi, Arabic |
+| 🎨 **Dark & Light Mode** | Beautiful analog clock with both themes |
+| 🔊 **Voice Control** | Adjust volume and speech speed |
+
+---
 
 ## 📸 Screenshots
 
+### 🏠 Home Screen - The Clock
+
 <p align="center">
-  <img src="screenshots/home_screen.jpg" alt="Home Screen" width="250"/>
-  <img src="screenshots/settings_intervals.jpg" alt="Auto Announcements" width="250"/>
+  <img src="screenshots/screenshot_1.jpg" alt="Home Screen - Dark Mode" width="280"/>
+  &nbsp;&nbsp;&nbsp;
+  <img src="screenshots/screenshot_2.jpg" alt="Home Screen - Light Mode" width="280"/>
 </p>
 
 <p align="center">
-  <img src="screenshots/settings_voice.jpg" alt="Voice Settings" width="250"/>
-  <img src="screenshots/settings_quiet.jpg" alt="Quiet Hours" width="250"/>
+  <em>Left: Dark Mode | Right: Light Mode</em>
 </p>
+
+**What you see:**
+- Beautiful analog wall clock with hour, minute, and second hands
+- Digital time display at the top
+- Status indicators showing announcement interval
+- Tap anywhere on the clock to hear the time!
+
+---
+
+### ⚙️ Settings - Dark Mode
+
+<p align="center">
+  <img src="screenshots/setting_1.jpg" alt="Settings Page 1 - Voice Settings" width="250"/>
+  &nbsp;
+  <img src="screenshots/setting_2.jpg" alt="Settings Page 2 - Auto Announcements" width="250"/>
+  &nbsp;
+  <img src="screenshots/setting_3.jpg" alt="Settings Page 3 - Quiet Hours" width="250"/>
+</p>
+
+| Screenshot | What It Shows |
+|------------|---------------|
+| **Settings 1** | Voice Settings - Volume, Speed, Language selection, Test Voice button |
+| **Settings 2** | Auto Announcements - Choose interval (15/30/60 min), Repeat Count (1-5 times) |
+| **Settings 3** | Quiet Hours - Enable/disable, Set start & end time, Appearance settings |
+
+---
+
+### ⚙️ Settings - Light Mode
+
+<p align="center">
+  <img src="screenshots/setting_1_1.jpg" alt="Settings Page 1 - Light Mode" width="250"/>
+  &nbsp;
+  <img src="screenshots/setting_1_2.jpg" alt="Settings Page 2 - Light Mode" width="250"/>
+  &nbsp;
+  <img src="screenshots/setting_1_3.jpg" alt="Settings Page 3 - Light Mode" width="250"/>
+</p>
+
+<p align="center">
+  <em>Same settings in Light Mode for users who prefer brighter screens</em>
+</p>
+
+---
 
 ## 🚀 Installation
 
-### Download APK
-📥 **[Download Talk Time APK](https://github.com/abel2800/Time-Talk/releases/latest)**
+### 📥 Download APK (Recommended)
 
-Click the link above, then download the `.apk` file.
+<p align="center">
+  <a href="https://github.com/abel2800/Time-Talk/releases/latest">
+    <img src="https://img.shields.io/badge/⬇️_Download_Latest_APK-4CAF50?style=for-the-badge&logoColor=white" alt="Download"/>
+  </a>
+</p>
 
-#### How to Install:
-1. Download the APK file on your Android phone
-2. Open the downloaded file
-3. If prompted, enable "Install from unknown sources"
-4. Tap "Install"
-5. Open the app and grant permissions when asked
+**Steps:**
+1. Click the download link above
+2. Download `TalkTime-v1.2.0.apk`
+3. Open the file on your Android phone
+4. If prompted, enable "Install from unknown sources"
+5. Tap **Install**
+6. Open the app and grant permissions
 
-### Build from Source
+### 🔧 Build from Source
+
 ```bash
 # Clone the repository
 git clone https://github.com/abel2800/Time-Talk.git
 
-# Navigate to project directory
+# Navigate to project
 cd Time-Talk
 
 # Get dependencies
 flutter pub get
 
-# Build APK
+# Build release APK
 flutter build apk --release
 ```
 
-## 📖 Usage
+---
 
-1. **Open the app** - Grant permissions when prompted for background operation
-2. **Tap anywhere** - Touch the screen to hear the current time
-3. **Set intervals** - Go to Settings → Auto Announcements → Select interval
-4. **Quiet hours** - Enable quiet hours to pause announcements at night
-5. **Background mode** - The app continues announcing time even when minimized
+## 📖 How to Use
 
 ### First Time Setup
-When you first open the app, you'll be asked to:
-1. Allow notification permissions
-2. Disable battery optimization (for 24/7 operation)
+1. **Open Talk Time** - The app will ask for permissions
+2. **Allow Notifications** - Required for background announcements
+3. **Disable Battery Optimization** - So the app works 24/7
 
-This ensures the app can announce the time even when running in the background.
+### Daily Usage
+
+| Action | How To |
+|--------|--------|
+| **Hear Time Now** | Tap anywhere on the clock screen |
+| **Set Auto Announce** | Settings → Auto Announcements → Select interval |
+| **Repeat Count** | Settings → Repeat Count → Choose 1-5 times |
+| **Enable Quiet Hours** | Settings → Quiet Hours → Turn on → Set times |
+| **Change Language** | Settings → Voice Language → Select language |
+| **Adjust Voice** | Settings → Voice Volume / Speed sliders |
+
+### Example Setup for a Blind User:
+1. Set **Auto Announce** to "Every 15 minutes"
+2. Set **Repeat Count** to "Twice" (says time 2 times)
+3. Enable **Quiet Hours** from 10 PM to 7 AM
+4. Enable **Vibration Feedback**
+
+Now the phone will automatically say the time twice every 15 minutes, except during sleep hours!
+
+---
+
+## 🌍 Supported Languages
+
+| Language | Flag | Voice Support |
+|----------|------|---------------|
+| English (US) | 🇺🇸 | ✅ |
+| Spanish | 🇪🇸 | ✅ |
+| French | 🇫🇷 | ✅ |
+| German | 🇩🇪 | ✅ |
+| Italian | 🇮🇹 | ✅ |
+| Portuguese | 🇧🇷 | ✅ |
+| Chinese | 🇨🇳 | ✅ |
+| Japanese | 🇯🇵 | ✅ |
+| Korean | 🇰🇷 | ✅ |
+| Hindi | 🇮🇳 | ✅ |
+| Arabic | 🇸🇦 | ✅ |
+
+---
+
+## 📋 Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| **v1.2.0** | Dec 2024 | ✅ Added Repeat Count (1-5 times) <br> ✅ Fixed screen-off announcements <br> ✅ Better background service |
+| **v1.1.0** | Dec 2024 | ✅ Full app localization (11 languages) <br> ✅ UI translates with language |
+| **v1.0.0** | Dec 2024 | 🎉 Initial release |
+
+---
 
 ## 🛠️ Built With
 
 - [Flutter](https://flutter.dev/) - Cross-platform framework
-- [flutter_tts](https://pub.dev/packages/flutter_tts) - Text-to-Speech
-- [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) - Background notifications
-- [permission_handler](https://pub.dev/packages/permission_handler) - Permission management
-- [shared_preferences](https://pub.dev/packages/shared_preferences) - Local storage
+- [flutter_tts](https://pub.dev/packages/flutter_tts) - Text-to-Speech engine
+- [flutter_background_service](https://pub.dev/packages/flutter_background_service) - 24/7 background operation
+- [shared_preferences](https://pub.dev/packages/shared_preferences) - Settings storage
 
-## 🤝 Contributing
-
-Contributions are welcome! If you have ideas to make this app more accessible, please:
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-**Copyright (c) 2024 Abel**
+---
 
 ## 👤 Author
 
 **Abel**
 - GitHub: [@abel2800](https://github.com/abel2800)
 
-## 🙏 Acknowledgments
+---
 
-- Designed with love for the visually impaired community
-- Inspired by the need for accessible technology
-- Thanks to all who provided feedback and suggestions
+## 📄 License
+
+MIT License - Copyright (c) 2024 Abel
+
+See [LICENSE](LICENSE) file for details.
 
 ---
 
 <p align="center">
-  Made with ❤️ for accessibility
+  <img src="screenshots/app_icon.png" alt="Talk Time" width="60"/>
+</p>
+
+<p align="center">
+  <strong>Made with ❤️ for the visually impaired community</strong>
+</p>
+
+<p align="center">
+  <em>"Everyone deserves to know the time independently"</em>
 </p>
