@@ -486,7 +486,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(l10n.version, style: const TextStyle(fontSize: 16)),
-                const Text('1.1.0', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const Text('1.3.0', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 16),

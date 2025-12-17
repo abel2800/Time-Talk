@@ -10,6 +10,14 @@
 .svn/
 migrate_working_dir/
 
+# APK files (upload to GitHub Releases instead)
+*.apk
+
+# Batch/script files
+*.bat
+*.py
+!pubspec.yaml
+
 # IntelliJ related
 *.iml
 *.ipr

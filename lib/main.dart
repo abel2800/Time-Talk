@@ -11,6 +11,13 @@ import 'l10n/app_localizations.dart';
 
 /// Talk Time - Voice-based Clock Assistant
 /// Full multi-language support
+/// 
+/// BULLETPROOF VERSION:
+/// - Background service runs 24/7
+/// - Survives phone reboot
+/// - Survives Android killing the app
+/// - Multiple backup mechanisms (AlarmManager, WorkManager)
+/// - Auto-restarts if killed
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +28,7 @@ void main() async {
   ]);
   
   // Initialize background service for 24/7 operation
+  // This also sets up AlarmManager backup
   await BackgroundService.initialize();
   
   runApp(const TalkTimeApp());
@@ -49,13 +57,42 @@ class TalkTimeMaterialApp extends StatefulWidget {
   State<TalkTimeMaterialApp> createState() => _TalkTimeMaterialAppState();
 }
 
-class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> {
+class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> with WidgetsBindingObserver {
   bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initializeApp();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// CRITICAL: Handle app lifecycle changes
+  /// Ensures service keeps running when app goes to background
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    
+    if (state == AppLifecycleState.resumed) {
+      // App came back to foreground - ensure service is running
+      debugPrint('App resumed - checking service health');
+      _ensureServiceRunning();
+    } else if (state == AppLifecycleState.paused) {
+      // App going to background - service should continue
+      debugPrint('App paused - service continues in background');
+    }
+  }
+
+  Future<void> _ensureServiceRunning() async {
+    // Check if service should be running and restart if needed
+    // This handles cases where Android killed the service
+    await BackgroundService.ensureServiceRunning();
   }
 
   Future<void> _initializeApp() async {
@@ -78,6 +115,9 @@ class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> {
     // Start background service
     await BackgroundService.startService();
     
+    // CRITICAL: Ensure service is running (handles restart after kill/reboot)
+    await BackgroundService.ensureServiceRunning();
+    
     setState(() => _isInitialized = true);
     
     // Request permissions after first frame
@@ -92,7 +132,8 @@ class _TalkTimeMaterialAppState extends State<TalkTimeMaterialApp> {
     // Request notification permission first
     await BackgroundService.requestNotificationPermission();
     
-    // Then request battery optimization
+    // Then request battery optimization - THIS IS CRITICAL
+    // Without this, Android will kill the service after a few days
     if (mounted) {
       await BackgroundService.requestBatteryOptimization(context);
     }

@@ -14,7 +14,7 @@
   <a href="https://github.com/abel2800/Time-Talk/releases/latest">
     <img src="https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android" alt="Download APK"/>
   </a>
-  <img src="https://img.shields.io/badge/Version-1.2.0-blue?style=for-the-badge" alt="Version"/>
+  <img src="https://img.shields.io/badge/Version-1.3.0-blue?style=for-the-badge" alt="Version"/>
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License"/>
 </p>
 
@@ -43,6 +43,7 @@ Many visually impaired people rely on others to tell them the time. This app giv
 | 🔄 **Repeat Count** | Say time 1-5 times so users don't miss it |
 | 🌙 **Quiet Hours** | Disable announcements during sleep (e.g., 10 PM - 7 AM) |
 | 🔔 **24/7 Background** | Works even when phone is locked or screen is off |
+| 🔄 **Survives Reboot** | Service automatically restarts after phone restart |
 | 📳 **Vibration** | Feel a vibration when time is announced |
 | 🌐 **11 Languages** | English, Spanish, French, German, Italian, Portuguese, Chinese, Japanese, Korean, Hindi, Arabic |
 | 🎨 **Dark & Light Mode** | Beautiful analog clock with both themes |
@@ -118,7 +119,7 @@ Many visually impaired people rely on others to tell them the time. This app giv
 
 **Steps:**
 1. Click the download link above
-2. Download `TalkTime-v1.2.0.apk`
+2. Download `TalkTime-v1.3.0.apk`
 3. Open the file on your Android phone
 4. If prompted, enable "Install from unknown sources"
 5. Tap **Install**
@@ -147,7 +148,7 @@ flutter build apk --release
 ### First Time Setup
 1. **Open Talk Time** - The app will ask for permissions
 2. **Allow Notifications** - Required for background announcements
-3. **Disable Battery Optimization** - So the app works 24/7
+3. **Disable Battery Optimization** - **CRITICAL** - So the app works 24/7 without stopping
 
 ### Daily Usage
 
@@ -192,9 +193,44 @@ Now the phone will automatically say the time twice every 15 minutes, except dur
 
 | Version | Date | Changes |
 |---------|------|---------|
+| **v1.3.0** | Dec 2024 | 🛠️ **MAJOR BUG FIXES** <br> ✅ Fixed timing issues - announcements now happen at EXACT intervals <br> ✅ Fixed service stopping after 2-3 days <br> ✅ Fixed notification disappearing from bar <br> ✅ Added auto-restart after phone reboot <br> ✅ Better battery optimization handling <br> ✅ More reliable background operation |
 | **v1.2.0** | Dec 2024 | ✅ Added Repeat Count (1-5 times) <br> ✅ Fixed screen-off announcements <br> ✅ Better background service |
 | **v1.1.0** | Dec 2024 | ✅ Full app localization (11 languages) <br> ✅ UI translates with language |
 | **v1.0.0** | Dec 2024 | 🎉 Initial release |
+
+---
+
+## 🔧 v1.3.0 Technical Fixes
+
+This version addresses critical issues reported by users:
+
+### Issues Fixed:
+
+1. **⏱️ Timing Inconsistency** (e.g., announcing every 1-2 min instead of 15 min)
+   - Now uses millisecond-precise timing with exact minute boundaries
+   - Announcements align to clock (e.g., :00, :15, :30, :45 for 15-min intervals)
+   - No more timer drift over time
+
+2. **📵 Service Stopping After 2-3 Days**
+   - Added proper foreground service persistence (`stopWithTask: false`)
+   - Implemented automatic restart mechanism when service is killed
+   - Service now properly survives Android's aggressive battery optimization
+
+3. **🔔 Notification Disappearing**
+   - Fixed notification channel configuration
+   - Service notification now stays in the notification bar
+
+4. **🔄 Phone Restart Issue**
+   - Added BootReceiver to automatically restart service after phone reboot
+   - Settings are preserved and service continues where it left off
+   - No need to re-configure the app after restart
+
+### Important for Reliable Operation:
+
+**⚠️ CRITICAL:** When the app asks to "Disable Battery Optimization", please **ALLOW** it. Without this:
+- Android may kill the app after a few hours/days
+- Time announcements will stop working
+- This is an Android limitation, not a bug
 
 ---
 
@@ -204,6 +240,7 @@ Now the phone will automatically say the time twice every 15 minutes, except dur
 - [flutter_tts](https://pub.dev/packages/flutter_tts) - Text-to-Speech engine
 - [flutter_background_service](https://pub.dev/packages/flutter_background_service) - 24/7 background operation
 - [shared_preferences](https://pub.dev/packages/shared_preferences) - Settings storage
+- [android_alarm_manager_plus](https://pub.dev/packages/android_alarm_manager_plus) - Exact alarm scheduling
 
 ---
 

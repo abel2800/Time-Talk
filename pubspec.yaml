@@ -3,7 +3,7 @@ description: Talk Time - Voice-based clock assistant for blind and visually impa
 
 publish_to: 'none'
 
-version: 1.2.0+3
+version: 1.5.0+6
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -37,8 +37,15 @@ dependencies:
   # For vibration feedback
   vibration: ^2.0.0
   
+  # For exact alarm scheduling (backup mechanism for precise timing)
+  android_alarm_manager_plus: ^4.0.3
+  
+  # For device info (to handle device-specific quirks)
+  device_info_plus: ^10.1.0
+  
   # Cupertino icons
   cupertino_icons: ^1.0.6
+  workmanager: ^0.9.0+3
 
 dev_dependencies:
   flutter_test:
